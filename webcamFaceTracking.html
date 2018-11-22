@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!--   https://matthewhallberg.com/store/webcamFaceTracking.html   -->
+  <script src="face-api.js"></script>
+  <script src="js/commons.js"></script>
+  <script src="js/drawing.js"></script>
+  <script src="js/faceDetectionControls.js"></script>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.css">
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+</head>
+<body>
+  <div class="center-content page-container">
+
+    
+    <div class="progress" id="loader">
+      <div class="indeterminate"></div>
+    </div>
+    <div style="position: relative" class="margin">
+      <video onplay="onPlay(this)" id="inputVideo" autoplay muted></video>
+      <canvas id="overlay" />
+    </div>
+
+  </body>
+
+  <script>
+    let forwardTimes = []
+    let withFaceLandmarks = true
+    let withBoxes = false
+
+
+    function updateTimeStats(timeInMs) {
+      forwardTimes = [timeInMs].concat(forwardTimes).slice(0, 30)
+      const avgTimeInMs = forwardTimes.reduce((total, t) => total + t) / forwardTimes.length
+      $('#time').val(`${Math.round(avgTimeInMs)} ms`)
+      $('#fps').val(`${faceapi.round(1000 / avgTimeInMs)}`)
+    }
+
+    var img = document.createElement("img");
+    img.src = 'images/glasses1.png';
+    async function onPlay() {
+      const videoEl = $('#inputVideo').get(0)
+
+      if(videoEl.paused || videoEl.ended || !isFaceDetectionModelLoaded())
+        return setTimeout(() => onPlay())
+
+
+      const options = getFaceDetectorOptions()
+
+      const ts = Date.now()
+
+      const faceDetectionTask = faceapi.detectSingleFace(videoEl, options)
+
+      const result = await faceDetectionTask.withFaceLandmarks()
+
+      updateTimeStats(Date.now() - ts)
+
+       var canvas = $('#overlay').get(0);
+       var ctx = canvas.getContext('2d');
+
+      if (result) {
+        var points = faceapi.drawGlasses(videoEl, canvas, [result]);
+          //original size 200 by 100
+          var x1 = points[0];
+          var y1 = points[1];
+          var x2 = points[2];
+          var y2 = points[3];
+          var centerX = (x1 + x2) /2;
+          var centerY = (y1 + y2) /2;
+          //scale image
+          var distanceFromEyes = Math.sqrt( Math.pow((x1-x2), 2) + Math.pow((y1-y2), 2));
+          var width = distanceFromEyes * 2.2;
+          var height = width/2;
+          var xPos = centerX - (width/2);
+          var yPos = centerY - (height/2);
+          //rotate image
+          ctx.save(); 
+          ctx.translate(xPos, yPos);
+          var angleDegrees = Math.atan2(y2 - y1, x2 - x1) * (Math.PI / 180);
+          ctx.rotate(angleDegrees);
+          ctx.drawImage(img,0,0,width,height);
+          // and restore the co-ords to how they were when we began
+          ctx.restore(); 
+
+      } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+
+      setTimeout(() => onPlay())
+    }
+
+    async function run() {
+      // load face detection and face landmark models
+      await changeFaceDetector(TINY_FACE_DETECTOR)
+      await faceapi.loadFaceLandmarkModel('/')
+      changeInputSize(128)
+
+      // try to access users webcam and stream the images
+      // to the video element
+      const stream = await navigator.mediaDevices.getUserMedia({ video: {} })
+      const videoEl = $('#inputVideo').get(0)
+      videoEl.srcObject = stream
+    }
+
+    function updateResults() {}
+
+    $(document).ready(function() {
+        // const header = document.createElement('h3')
+        // header.innerHTML = "Webcam Face Tracking"
+        // const pageContainer = $('.page-container').get(0)
+        // pageContainer.insertBefore(header, pageContainer.children[0])
+        run()
+    })
+  </script>
+</body>
+</html>
