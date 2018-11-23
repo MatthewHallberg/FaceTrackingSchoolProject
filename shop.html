@@ -6,22 +6,37 @@
   <script src="js/commons.js"></script>
   <script src="js/drawing.js"></script>
   <script src="js/faceDetectionControls.js"></script>
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.css">
   <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+    <link rel="stylesheet" href="main.css">
+  <link href="https://fonts.googleapis.com/css?family=Permanent+Marker" rel="stylesheet">
+    <ul>
+    <li><a href="main.html"><img src="images/logo.png" id="logo"><li>   
+    <li><a href="default.asp">Account</a></li>
+    <li><a href="news.asp">About Us</a></li>
+    <li><a href="https://matthewhallberg.com/store/webcamFaceTracking.html">Product</a></li>
+    <li><a href="https://matthewhallberg.com/store/shop.html">Shop</a></li>
+  </ul>
 </head>
 <body>
-  <div class="center-content page-container">
+       <!--video-->
+       <div style="position:fixed; top:83px; right:30px;">
+            <video onplay="onPlay(this)" id="inputVideo" autoplay muted></video>
+            <canvas id="overlay" />
+      </div>
 
-    
-    <div class="progress" id="loader">
-      <div class="indeterminate"></div>
-    </div>
-    <div style="position: relative" class="margin">
-      <video onplay="onPlay(this)" id="inputVideo" autoplay muted></video>
-      <canvas id="overlay" />
-    </div>
+      <!--products-->
+      <input type="image" id="glasses1" onclick="changeGlasses(this.id)" style="height:100;width:170;" src="images/glasses1.png"/>
+
+      <input type="image" id="glasses2" onclick="changeGlasses(this.id)"  style="height:100;width:170;" src="images/glasses2.png"/>
+
+      <input type="image" id="glasses3" onclick="changeGlasses(this.id)"  style="height:100;width:170;" src="images/glasses3.png"/>
+
+      <input type="image" id="glasses4" onclick="changeGlasses(this.id)"  style="height:100;width:170;" src="images/glasses4.png"/>
+
+      <input type="image" id="glasses5" onclick="changeGlasses(this.id)"  style="height:100;width:170;" src="images/glasses5.png"/>
+
+
 
   </body>
 
@@ -29,7 +44,11 @@
     let forwardTimes = []
     let withFaceLandmarks = true
     let withBoxes = false
+    var imageSource = 'images/glasses1.png';
 
+    function changeGlasses(id) {
+      imageSource = 'images/' + id + '.png';
+    }
 
     function updateTimeStats(timeInMs) {
       forwardTimes = [timeInMs].concat(forwardTimes).slice(0, 30)
@@ -39,8 +58,9 @@
     }
 
     var img = document.createElement("img");
-    img.src = 'images/glasses1.png';
     async function onPlay() {
+      img.src = imageSource;
+
       const videoEl = $('#inputVideo').get(0)
 
       if(videoEl.paused || videoEl.ended || !isFaceDetectionModelLoaded())
@@ -78,7 +98,6 @@
           ctx.save(); 
           ctx.translate(centerX, centerY);
           var angleRadians = angle(x1,y1,x2,y2);
-          console.log(angleRadians);
           ctx.rotate(angleRadians);
 
           var xPos = -width/2;
@@ -120,10 +139,6 @@
     function updateResults() {}
 
     $(document).ready(function() {
-        // const header = document.createElement('h3')
-        // header.innerHTML = "Webcam Face Tracking"
-        // const pageContainer = $('.page-container').get(0)
-        // pageContainer.insertBefore(header, pageContainer.children[0])
         run()
     })
   </script>

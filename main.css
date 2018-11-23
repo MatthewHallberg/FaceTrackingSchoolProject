@@ -1,0 +1,50 @@
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+li {
+    float: right;
+}
+
+li a {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 15px 15px;
+    text-decoration: none;
+    font-family: 'Permanent Marker', cursive;
+}
+
+/* Change the link color to #111 (black) on hover */
+li a:hover {
+    background-color: #111;
+}
+
+body {
+   margin: 0px;
+}
+
+#bg {
+  position: relative; 
+  left: 0; 
+  min-width: 100%;
+  min-height: 100%;
+}
+
+#logo {
+  position: absolute;  
+  height:100px;  
+  width:100px;  
+  left: 25px; 
+  top: -19px;
+}
+
+#overlay, .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
