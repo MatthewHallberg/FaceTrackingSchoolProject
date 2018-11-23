@@ -28,6 +28,33 @@ body {
    margin: 0px;
 }
 
+.shoppingElement {
+    margin-left:30px;
+    margin-top:20px;
+    width: 40%;
+    overflow: hidden;
+}
+
+.shoppingElementImage {
+    float:left;
+    display: inline;
+    width 40%;
+}
+
+.shoppingElementText {
+    float: left;
+    display: inline;
+    font-size: 32px;
+    font-family: 'Permanent Marker', cursive;
+    color: black;
+    margin-left: 30px;
+    margin-top: 10px;
+}
+
+.shoppingElementSubTitle {
+    margin-top: -15px;
+}
+
 #bg {
   position: relative; 
   left: 0; 
