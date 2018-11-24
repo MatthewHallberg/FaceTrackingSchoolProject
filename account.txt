@@ -31,9 +31,9 @@
       $password = $_POST['password'];
 
       $servername = "localhost";
-      $usernameDB = "matthew5_matt";
-      $passwordDB = "password666";
-      $dbName = "matthew5_school";
+      $usernameDB = "****";
+      $passwordDB = "****";
+      $dbName = "****";
 
       //Make Connection
       $conn = mysqli_connect($servername,$usernameDB,$passwordDB,$dbName);

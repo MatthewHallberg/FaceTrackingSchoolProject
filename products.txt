@@ -25,9 +25,9 @@
       $shape = $_POST['shape'];
 
       $servername = "localhost";
-      $username = "matthew5_matt";
-      $password = "password666";
-      $dbName = "matthew5_school";
+      $usernameDB = "****";
+      $passwordDB = "****";
+      $dbName = "****";
 
       //Make Connection
       $conn = mysqli_connect($servername,$username,$password,$dbName);
