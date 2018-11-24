@@ -2069,13 +2069,23 @@
         ctx.stroke();
     }
 
-    function drawLandmarks(canvasArg, faceLandmarks, options) {
-        var canvas = resolveInput(canvasArg);
+    function drawLandmarks(dimensions, canvas, results) {
+
+        const resizedResults = resizeCanvasAndResults(dimensions, canvas, results)
+
+       const faceLandmarks = resizedResults.map(det => det.landmarks)
+       const drawLandmarksOptions = {
+         lineWidth: 2,
+         drawLines: true,
+         color: 'red'
+       }
+
+        var canvas = resolveInput(canvas);
         if (!(canvas instanceof env.getEnv().Canvas)) {
             throw new Error('drawLandmarks - expected canvas to be of type: HTMLCanvasElement');
         }
-        var drawOptions = Object.assign(getDefaultDrawOptions(options), (options || {}));
-        var drawLines = Object.assign({ drawLines: false }, (options || {})).drawLines;
+        var drawOptions = Object.assign(getDefaultDrawOptions(drawLandmarksOptions), (drawLandmarksOptions || {}));
+        var drawLines = Object.assign({ drawLines: false }, (drawLandmarksOptions || {})).drawLines;
         var ctx = getContext2dOrThrow(canvas);
         var lineWidth = drawOptions.lineWidth, _a = drawOptions.color, color = _a === void 0 ? 'blue' : _a;
         var faceLandmarksArray = Array.isArray(faceLandmarks) ? faceLandmarks : [faceLandmarks];

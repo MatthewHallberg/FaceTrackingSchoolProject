@@ -12,9 +12,9 @@
   <link href="https://fonts.googleapis.com/css?family=Permanent+Marker" rel="stylesheet">
     <ul>
     <li><a href="main.html"><img src="images/logo.png" id="logo"><li>   
-    <li><a href="default.asp">Account</a></li>
-    <li><a href="news.asp">About Us</a></li>
-    <li><a href="https://matthewhallberg.com/store/webcamFaceTracking.html">Product</a></li>
+    <li><a href="account.php">Account</a></li>
+    <li><a href="about.html">About Us</a></li>
+    <li><a href="https://matthewhallberg.com/store/products.php">Product</a></li>
     <li><a href="https://matthewhallberg.com/store/shop.html">Shop</a></li>
   </ul>
 </head>
@@ -28,8 +28,8 @@
       <!--product 1-->
       <div class = "shoppingElement">  
         <div class = "shoppingElementImage">
-          <input type="image" id="glasses1" onclick="changeGlasses(this.id)" style="height:100;width:170;
-          outline-style: none;" src="images/glasses1.png"/>
+          <input type="image" id="Wayfarer" onclick="changeGlasses(this.id)" style="height:100;width:170;
+          outline-style: none;" src="images/Wayfarer.png"/>
         </div>
       <div class = "shoppingElementText"> Wayfarer
         <div class = "shoppingElementSubTitle">
@@ -41,8 +41,8 @@
       <!--product 2-->
       <div class = "shoppingElement">  
         <div class = "shoppingElementImage">
-          <input type="image" id="glasses2" onclick="changeGlasses(this.id)" style="height:100;width:170;
-          outline-style: none;" src="images/glasses2.png"/>
+          <input type="image" id="Work Harder" onclick="changeGlasses(this.id)" style="height:100;width:170;
+          outline-style: none;" src="images/Work Harder.png"/>
         </div>
       <div class = "shoppingElementText"> Work Harder
         <div class = "shoppingElementSubTitle">
@@ -54,8 +54,8 @@
       <!--product 3-->
       <div class = "shoppingElement">  
         <div class = "shoppingElementImage">
-          <input type="image" id="glasses3" onclick="changeGlasses(this.id)" style="height:100;width:170;
-          outline-style: none;" src="images/glasses3.png"/>
+          <input type="image" id="Aviator" onclick="changeGlasses(this.id)" style="height:100;width:170;
+          outline-style: none;" src="images/Aviator.png"/>
         </div>
       <div class = "shoppingElementText"> Aviator
         <div class = "shoppingElementSubTitle">
@@ -67,8 +67,8 @@
        <!--product 4-->
       <div class = "shoppingElement">  
         <div class = "shoppingElementImage">
-          <input type="image" id="glasses4" onclick="changeGlasses(this.id)" style="height:100;width:170;
-          outline-style: none;" src="images/glasses4.png"/>
+          <input type="image" id="Ingram" onclick="changeGlasses(this.id)" style="height:100;width:170;
+          outline-style: none;" src="images/Ingram.png"/>
         </div>
       <div class = "shoppingElementText"> Ingram
         <div class = "shoppingElementSubTitle">
@@ -80,13 +80,13 @@
        <!--product 4-->
       <div class = "shoppingElement">  
         <div class = "shoppingElementImage">
-          <input type="image" id="glasses5" onclick="changeGlasses(this.id)" style="height:100;width:170;
-          outline-style: none;" src="images/glasses5.png"/>
+          <input type="image" id="Spectacles" onclick="changeGlasses(this.id)" style="height:100;width:170;
+          outline-style: none;" src="images/Spectacles.png"/>
         </div>
       <div class = "shoppingElementText"> Spectacles
         <div class = "shoppingElementSubTitle">
         <span style = "color: red; font-size: 23px;">$29.99</span>
-        <span style = "color: black; font-size: 18px;">by Polo</span>
+        <span style = "color: black; font-size: 18px;">by DKNY</span>
         </div>
       </div>
       </div>
@@ -136,33 +136,38 @@
        var ctx = canvas.getContext('2d');
 
       if (result) {
-        var points = faceapi.drawGlasses(videoEl, canvas, [result]);
+
+          var points = faceapi.drawGlasses(videoEl, canvas, [result]);
+          //faceapi.drawLandmarks(videoEl,canvas,[result]);
+
           //original size 200 by 100
-          var x1 = points[0];
-          var y1 = points[1];
-          var x2 = points[2];
-          var y2 = points[3];
-          var centerX = (x1 + x2) /2;
-          var centerY = (y1 + y2) /2;
-          //scale image
-          var distanceFromEyes = Math.sqrt( Math.pow((x1-x2), 2) + Math.pow((y1-y2), 2));
-          var width = distanceFromEyes * 2.2;
-          var height = width/2;
+          if (typeof points != 'undefined'){
+            var x1 = points[0];
+            var y1 = points[1];
+            var x2 = points[2];
+            var y2 = points[3];
+            var centerX = (x1 + x2) /2;
+            var centerY = (y1 + y2) /2;
+            //scale image
+            var distanceFromEyes = Math.sqrt( Math.pow((x1-x2), 2) + Math.pow((y1-y2), 2));
+            var width = distanceFromEyes * 2.2;
+            var height = width/2;
 
-          //rotate image
-          ctx.save(); 
-          ctx.translate(centerX, centerY);
-          var angleRadians = angle(x1,y1,x2,y2);
-          ctx.rotate(angleRadians);
+            //rotate image
+            ctx.save(); 
+            ctx.translate(centerX, centerY);
+            var angleRadians = angle(x1,y1,x2,y2);
+            ctx.rotate(angleRadians);
 
-          var xPos = -width/2;
-          var yPos = -height/2;
+            var xPos = -width/2;
+            var yPos = -height/2;
 
-          var yOffset = 10;
+            var yOffset = 10;
 
-          ctx.drawImage(img,xPos,yPos + yOffset,width,height);
-          // and restore the cooordinates to how they were when we began
-          ctx.restore(); 
+            ctx.drawImage(img,xPos,yPos + yOffset,width,height);
+            // and restore the cooordinates to how they were when we began
+            ctx.restore(); 
+        }
 
       } else {
           ctx.clearRect(0, 0, canvas.width, canvas.height);
